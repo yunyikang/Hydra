@@ -1,5 +1,6 @@
 package com.example.yunyi.projecthydra;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -109,10 +110,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    public void changeDetails(View v) {
-//        Intent intent = new Intent(this, DetailsActivity.class);
-//        startActivity(intent);
-//    }
+    public void changeDetails(View v) {
+        Intent intent = new Intent(this, DetailsActivity.class);
+        startActivity(intent);
+    }
 
 }
 
