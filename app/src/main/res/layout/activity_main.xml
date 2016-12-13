@@ -14,15 +14,18 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="400dp"
+        />
 
     <Button
-        android:text="Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/button3"
-        android:onClick="changeDetails" />
+        android:id="@+id/buttonAddPlant"
+        android:layout_below="@+id/rv"
+        android:layout_centerInParent="true"
+        android:text="Add Plant"
+        android:textAllCaps="true"/>
+
+
 
 </RelativeLayout>
