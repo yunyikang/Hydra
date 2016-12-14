@@ -1,10 +1,16 @@
 package com.example.yunyi.projecthydra;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +37,19 @@ public class DetailsActivity extends AppCompatActivity {
     PreviewLineChartView previewChart;
     LineChartData data;
     LineChartData previewData;
+    String id;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Intent intentt = getIntent();
+        Bundle bundle = intentt.getExtras();
+
+        if (bundle != null) {
+            id = (String) bundle.get("idNum");
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         chart = (LineChartView)findViewById(R.id.chart);
@@ -143,6 +159,36 @@ public class DetailsActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_details, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.signout:
+                signOut();
+                return true;
+            case R.id.settings:
+                Intent intent = new Intent(DetailsActivity.this, SettingsActivity.class);
+                intent.putExtra("idNum", id);
+                startActivity(intent);
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void signOut() {
+
+        mAuth.signOut();
+        Intent intent = new Intent(DetailsActivity.this, AuthActivity.class);
+        startActivity(intent);
     }
 
 
