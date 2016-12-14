@@ -23,6 +23,8 @@
 
 
 
+
+
     <TextView
         android:id="@+id/status"
         android:layout_width="wrap_content"
@@ -77,10 +79,15 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
 
+
+
+
+
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/email_sign_in_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+
             android:text="@string/sign_in"
             android:layout_marginTop="12dp"
             android:backgroundTint="@color/primary_light" />
@@ -91,6 +98,7 @@
             android:layout_height="wrap_content"
             android:text="@string/create_account" />
     </LinearLayout>
+
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/sign_out_button"

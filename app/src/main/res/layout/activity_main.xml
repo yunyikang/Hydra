@@ -10,12 +10,23 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.yunyi.projecthydra.MainActivity">
 
+    <TextView
+        android:text="My Plants"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="serif"
+        android:textSize="24sp"
+        android:layout_marginBottom="24dp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv"
         android:layout_width="match_parent"
         android:layout_height="400dp"
+
         android:layout_alignParentTop="true"
+
         android:layout_below="@+id/textView"/>
 
     <Button
@@ -26,7 +37,7 @@
         android:layout_centerInParent="true"
         android:text="Add Plant"
         android:textAllCaps="true"/>
-<<<<<<< HEAD
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,9 +46,6 @@
         android:text="Low water level detected, check details"
         android:textColor="@color/red"
         android:id="@+id/redalert"/>
-=======
 
 
-
->>>>>>> origin/waiwai-branch
 </RelativeLayout>
