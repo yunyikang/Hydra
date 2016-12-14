@@ -6,12 +6,17 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+<<<<<<< HEAD
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+=======
+import android.widget.Toast;
+
+>>>>>>> origin/waiwai-branch
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,14 +55,18 @@ public class DetailsActivity extends AppCompatActivity {
     LineChartData data;
     LineChartData previewData;
     List<Logs> logArrayList;
+<<<<<<< HEAD
     String id;
     private FirebaseAuth mAuth;
+=======
+>>>>>>> origin/waiwai-branch
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+<<<<<<< HEAD
         Intent intentt = getIntent();
         Bundle bundle = intentt.getExtras();
 
@@ -68,6 +77,8 @@ public class DetailsActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
+=======
+>>>>>>> origin/waiwai-branch
         final List<PointValue> moisturevalues = new ArrayList<PointValue>();
         final List<PointValue> heightvalues = new ArrayList<PointValue>();
         logArrayList = new ArrayList<Logs>();
@@ -122,20 +133,35 @@ public class DetailsActivity extends AppCompatActivity {
 
                 previewChart.setViewportChangeListener(new ViewportListener());
                 previewX(true);
+<<<<<<< HEAD
 
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+=======
+>>>>>>> origin/waiwai-branch
 
             }
 
             @Override
+<<<<<<< HEAD
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+=======
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+>>>>>>> origin/waiwai-branch
+
+            }
+
+            @Override
+<<<<<<< HEAD
+=======
             public void onChildRemoved(DataSnapshot dataSnapshot) {
 
             }
 
             @Override
+>>>>>>> origin/waiwai-branch
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
             }
@@ -294,6 +320,7 @@ public class DetailsActivity extends AppCompatActivity {
 
 }
 
+<<<<<<< HEAD
 
 
 
@@ -312,3 +339,20 @@ public class DetailsActivity extends AppCompatActivity {
 //        this.moistureI = Integer.parseInt(this.moisture);
 //    }
 //}
+=======
+class Logs {
+    public String moisture;
+    public String time;
+    public String wHeight;
+    public int moistureI;
+
+    public Logs() {}
+
+    public Logs(String moisture, String time, String wHeight) {
+        this.moisture = moisture;
+        this.time = time;
+        this.wHeight = wHeight;
+        this.moistureI = Integer.parseInt(this.moisture);
+    }
+}
+>>>>>>> origin/waiwai-branch
