@@ -70,13 +70,6 @@ public class SettingsActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
 
-
-//        mWaterRef = mDatabase.child("user").child(createUserName(mUser.toString()))
-//                .child(id).child("waterNeeds");
-//
-//        mSunRef = mDatabase.child("user").child(createUserName(mUser.toString()))
-//                .child(id).child("sunNeeds");
-
         seekBar1 = (SeekBar) findViewById(R.id.seekBar1);
         seekBar2 = (SeekBar) findViewById(R.id.seekBar2);
 
@@ -86,13 +79,6 @@ public class SettingsActivity extends AppCompatActivity {
         editText2 = (EditText) findViewById(R.id.editSun);
         buttonSave = (Button) findViewById(R.id.buttonSave);
 
-        mWaterRef = firebaseDatabase.getReference("user/" + createUserName(mUser.getEmail().toString())
-                + "/" + id +  "/waterNeeds");
-        mSunRef = firebaseDatabase.getReference("user/" + createUserName(mUser.getEmail().toString())
-                + "/" + id +  "/sunNeeds");
-
-
-
         final DatabaseReference mWaterRef2 = firebaseDatabase.getReference("boxes/plant001/info/required_water");
         final DatabaseReference mSunRef2 = firebaseDatabase.getReference("boxes/plant001/info/required_light");
 
@@ -100,8 +86,6 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 editText1.setText(dataSnapshot.getValue().toString());
-//                seekBar1.setProgress(Integer.parseInt(dataSnapshot.getValue().toString()) % 10);
-//                textView1.setText(dataSnapshot.getValue().toString());
             }
 
             @Override
@@ -113,8 +97,6 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 editText2.setText(dataSnapshot.getValue().toString());
-//                seekBar2.setProgress(Integer.parseInt(dataSnapshot.getValue().toString()) % 10);
-//                textView2.setText(dataSnapshot.getValue().toString());
             }
 
             @Override
@@ -129,80 +111,15 @@ public class SettingsActivity extends AppCompatActivity {
                 String waterLevel = editText1.getText().toString();
                 String sunLevel = editText2.getText().toString();
 
-                mWaterRef.setValue(waterLevel);
-                mSunRef.setValue(sunLevel);
-
                 mWaterRef2.setValue(waterLevel);
                 mSunRef2.setValue(sunLevel);
 
-//                Map<String, Object> updateWater = new HashMap<>();
-//                updateWater.put("/user/" + id + "/waterNeeds", waterLevel);
-//
-//                mDatabase.updateChildren(updateWater);
-//
-//                Map<String, Object> updateSun = new HashMap<>();
-//                updateWater.put("/user/" + id + "/sunNeeds", sunLevel);
-//
-//                mDatabase.updateChildren(updateSun);
+                Toast.makeText(getApplicationContext(),"saved",Toast.LENGTH_SHORT).show();
 
-//                String waterLevel = textView1.getText().toString();
-//                String sunLevel = textView2.getText().toString();
-//
-//                mWaterRef.setValue(waterLevel);
-//                mSunRef.setValue(sunLevel);
-//
-//                mWaterRef2.setValue(waterLevel);
-//                mSunRef2.setValue(sunLevel);
-
-
-                Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
-                startActivity(intent);
-
-//                Map<String, Object> postValues = plant.toMap();
-//
-//                Map<String, Object> childUpdates = new HashMap<>();
-//                childUpdates.put("/user/" + key, postValues);
-//
-//                mDatabase.updateChildren(childUpdates);
-
+                 Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                 startActivity(intent);
             }
         });
-
-        //image.setImageResource(imagenum);
-
-         //Initialize the textview with '0'.
-        //textView1.setText("Water value: " + seekBar1.getProgress());
-//        seekBar1.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-//
-//            int progressValue1 = 0;
-//
-//            public void onProgressChanged(SeekBar seekBar, int value, boolean fromUser) {
-//                progressValue1 = value;
-//            }
-//            public void onStartTrackingTouch(SeekBar seekBar) {
-//            }
-//            public void onStopTrackingTouch(SeekBar seekBar) {
-//                //textView1.setText(progressValue1);
-//                textView1.setText(progressValue1 * 10);
-//
-//            }
-//        });
-//
-//        //textView2.setText("Sun value: " + seekBar2.getProgress());
-//        seekBar2.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-//            int progressValue2 = 0;
-//
-//            public void onProgressChanged(SeekBar seekBar, int value, boolean fromUser) {
-//                progressValue2 = value;
-//            }
-//            public void onStartTrackingTouch(SeekBar seekBar) {
-//            }
-//            public void onStopTrackingTouch(SeekBar seekBar) {
-//                //textView2.setText(progressValue2);
-//                textView2.setText(progressValue2 * 10);
-//
-//            }
-//        });
     }
 
     @Override

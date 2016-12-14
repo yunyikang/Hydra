@@ -39,7 +39,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Moisture Level:"
+                android:text="Water Level:"
                 android:layout_gravity="left"
                 android:layout_marginBottom="20dp"
                 android:layout_marginRight="15dp"
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/editWater"
 
-                />
+                android:inputType="numberDecimal" />
 
         </LinearLayout>
         <TextView
@@ -79,7 +79,8 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/editSun"/>
+                android:id="@+id/editSun"
+                android:inputType="numberDecimal" />
 
         </LinearLayout>
         <TextView
