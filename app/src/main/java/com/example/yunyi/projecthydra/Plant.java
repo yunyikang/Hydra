@@ -12,15 +12,15 @@ public class Plant {
     private String type;
     private String name;
     private String id;
-    private int waterNeeds;
-    private int sunNeeds;
+    private String waterNeeds;
+    private String sunNeeds;
 
     public Plant(String type, String name, String id) {
         this.type = type;
         this.id = id;
         this.name = null;
-        this.waterNeeds = 40;
-        this.sunNeeds = 50;
+        this.waterNeeds = "40";
+        this.sunNeeds = "50";
         this.name = name;
     }
     public Plant() {
@@ -30,23 +30,23 @@ public class Plant {
         this.type = type;
         this.id = id;
         this.name = null;
-        this.waterNeeds = 40;
-        this.sunNeeds = 50;
+        this.waterNeeds = "40";
+        this.sunNeeds = "50";
     }
 
-    public int getWaterNeeds() {
+    public String getWaterNeeds() {
         return waterNeeds;
     }
 
-    public void setWaterNeeds(int waterNeeds) {
+    public void setWaterNeeds(String waterNeeds) {
         this.waterNeeds = waterNeeds;
     }
 
-    public int getSunNeeds() {
+    public String getSunNeeds() {
         return sunNeeds;
     }
 
-    public void setSunNeeds(int sunNeeds) {
+    public void setSunNeeds(String sunNeeds) {
         this.sunNeeds = sunNeeds;
     }
 

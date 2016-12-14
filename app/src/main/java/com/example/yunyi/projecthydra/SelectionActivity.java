@@ -34,7 +34,8 @@ import java.util.Map;
 public class SelectionActivity extends AppCompatActivity {
 
     //get reference to database
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference mDatabase = firebaseDatabase.getReference();
 
     //get reference to current user
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -51,12 +52,12 @@ public class SelectionActivity extends AppCompatActivity {
 
         simpleList = (ListView) findViewById(R.id.simpleListView);
 
-        animalList.add(new Item("Flowers", R.drawable.plant1));
-        animalList.add(new Item("Bonsai", R.drawable.plant2));
-        animalList.add(new Item("Small", R.drawable.plant3));
-        animalList.add(new Item("Cactus", R.drawable.plant5));
-        animalList.add(new Item("Herbs", R.drawable.plant6));
-        animalList.add(new Item("Others", R.drawable.plant4));
+        animalList.add(new Item("Flowers", R.drawable.aflower));
+        animalList.add(new Item("Bonsai", R.drawable.bbonsai));
+        //animalList.add(new Item("Small", R.drawable.plant3));
+        animalList.add(new Item("Cactus", R.drawable.ccactus));
+        //animalList.add(new Item("Herbs", R.drawable.plant5));
+        animalList.add(new Item("Others", R.drawable.dothers));
 
         MyAdapter myAdapter = new MyAdapter(this, R.layout.selection_element_view, animalList);
         simpleList.setAdapter(myAdapter);
@@ -93,6 +94,10 @@ public class SelectionActivity extends AppCompatActivity {
                                 } else {
                                     writeNewPost(user, type, name);
                                 }
+                                if (name.equals("Potty")) {
+                                    firebaseDatabase.getReference("boxes/plant001/info/owner").setValue(user);
+                                }
+
                                 Intent intent = new Intent(SelectionActivity.this, MainActivity.class);
                                 //intent.putExtra("IMAGE_I_NEED", animalList.get(i).animalImage);
                                 startActivity(intent);
@@ -148,6 +153,8 @@ public class SelectionActivity extends AppCompatActivity {
         childUpdates.put("/user/" + key, postValues);
 
         mDatabase.updateChildren(childUpdates);
+
+        //DatabaseReference newRef = firebaseDatabase.getReference("user/" + currentUser + "/");
     }
 
     private String createUserName(String s) {

@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,8 +21,11 @@ import android.widget.Toast;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -37,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
+    FirebaseDatabase firebaseDatabase;
+
 
     DatabaseReference mRef;
     //make a reference to current user node on firebase
@@ -45,8 +51,11 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseUser user;
 
+    private int tracker;
+
 
     private RecyclerView rv;
+    private TextView textAlert;
 
     private Button buttonAdd;
 
@@ -60,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         rv = (RecyclerView) findViewById(R.id.rv);
         rv.setHasFixedSize(true);
         rv.setLayoutManager(new LinearLayoutManager(this));
+
+        textAlert = (TextView) findViewById(R.id.redalert);
 
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
@@ -86,16 +97,38 @@ public class MainActivity extends AppCompatActivity {
         };
         // [END auth_state_listener]
 
+        //user = FirebaseAuth.getInstance().getCurrentUser();
+
+//
+//        String s = user.getEmail().toString();
+//        String user = createUserName(s);
+//
+//        mRef = FirebaseDatabase.getInstance().getReference();
+//        //make a reference to current user node on firebase
+//        mUser = mRef.child("user").child(user);
+//        Log.d("user now is", user);
+
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference mAlertRef = firebaseDatabase.getReference("boxes/plant001/info/water_needrefill");
 
-        String s = user.getEmail().toString();
-        String user = createUserName(s);
+        mAlertRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                tracker = Integer.parseInt(dataSnapshot.getValue().toString());
+                if (tracker == 1) {
+                    textAlert.setVisibility(View.VISIBLE);
+                }
+                else textAlert.setVisibility(View.GONE);
 
-        mRef = FirebaseDatabase.getInstance().getReference();
-        //make a reference to current user node on firebase
-        mUser = mRef.child("user").child(user);
-        Log.d("user now is", user);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +145,16 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
 
+        String s = user.getEmail().toString();
+        String user = createUserName(s);
+
+
+        mRef = firebaseDatabase.getReference();
+        //make a reference to current user node on firebase
+        mUser = mRef.child("user").child(user);
+
+        Log.d("user now is", user);
+
 
         FirebaseRecyclerAdapter<Plantt, MyViewHolder> mAdapter =
                 new FirebaseRecyclerAdapter<Plantt, MyViewHolder>(
@@ -123,16 +166,19 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     protected void populateViewHolder
                             (MyViewHolder viewHolder, Plantt p, int position) {
+
+                        final String namee = p.getName();
+                        final String id = p.getId();
                         ArrayList<String> l = new ArrayList<>();
-                        l.add("Flowers");
+                        l.add("Flower");
                         l.add("Bonsai");
-                        l.add("Small");
+                        //l.add("Small");
                         l.add("Cactus");
-                        l.add("Herbs");
+                        //l.add("Herbs");
                         l.add("Others");
 
                         int index = l.indexOf(p.getType());
-                        viewHolder.plantPhoto.setImageResource(R.drawable.plant1 + index);
+                        viewHolder.plantPhoto.setImageResource(R.drawable.aflower + index);
 
 
                         if (p.name.equals(null)) {
@@ -145,12 +191,21 @@ public class MainActivity extends AppCompatActivity {
                         Log.i(p.getName() + "R.drawable is", String.valueOf(R.drawable.plant1));
                         Log.i(p.getName() + "R.drawable is", String.valueOf(R.drawable.plant2));
 
-                        viewHolder.rl.setOnClickListener(new View.OnClickListener() {
+                        viewHolder.ll.setOnClickListener(new View.OnClickListener() {
                             @Override
                             //make intent to details activity
                             public void onClick(View view) {
-                                Toast.makeText(getApplicationContext(),
-                                        "Hello",Toast.LENGTH_SHORT).show();
+
+                                if (namee.equals("Potty")) {
+                                    Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+                                    intent.putExtra("idNum", id);
+                                    startActivity(intent);
+                                }
+                                else {
+                                    //Toast.makeText(getApplicationContext(),
+                                   //         "Proceed to Details Page",Toast.LENGTH_SHORT).show();
+                                }
+
                             }
                         });
                     }
@@ -163,13 +218,15 @@ public class MainActivity extends AppCompatActivity {
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         TextView plantName;
         ImageView plantPhoto;
-        RelativeLayout rl;
+        LinearLayout ll;
+        TextView alert;
 
         public MyViewHolder(View v) {
             super(v);
             plantName = (TextView) v.findViewById(R.id.name);
             plantPhoto = (ImageView) v.findViewById(R.id.photo);
-            rl = (RelativeLayout) v.findViewById(R.id.rl);
+            ll = (LinearLayout) v.findViewById(R.id.ll);
+            alert = (TextView) v.findViewById(R.id.alert);
         }
     }
 
@@ -197,10 +254,10 @@ public class MainActivity extends AppCompatActivity {
         private String type;
         private String name;
         private String id;
-        private int waterNeeds;
-        private int sunNeeds;
+        private String waterNeeds;
+        private String sunNeeds;
 
-        public Plantt(String name, String type, String id, int water, int sun) {
+        public Plantt(String name, String type, String id, String water, String sun) {
             this.type = type;
             this.waterNeeds = water;
             sunNeeds = sun;
@@ -220,19 +277,19 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        public int getWaterNeeds() {
+        public String getWaterNeeds() {
             return waterNeeds;
         }
 
-        public void setWaterNeeds(int waterNeeds) {
+        public void setWaterNeeds(String waterNeeds) {
             this.waterNeeds = waterNeeds;
         }
 
-        public int getSunNeeds() {
+        public String getSunNeeds() {
             return sunNeeds;
         }
 
-        public void setSunNeeds(int sunNeeds) {
+        public void setSunNeeds(String sunNeeds) {
             this.sunNeeds = sunNeeds;
         }
 
@@ -269,12 +326,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
+
 
 
 
