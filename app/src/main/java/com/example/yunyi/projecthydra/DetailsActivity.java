@@ -5,12 +5,18 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,36 +43,100 @@ public class DetailsActivity extends AppCompatActivity {
     PreviewLineChartView previewChart;
     LineChartData data;
     LineChartData previewData;
+    List<Logs> logArrayList;
     String id;
     private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        Intent intentt = getIntent();
-        Bundle bundle = intentt.getExtras();
-
-        if (bundle != null) {
-            id = (String) bundle.get("idNum");
-        }
-
         super.onCreate(savedInstanceState);
+
+        final List<PointValue> moisturevalues = new ArrayList<PointValue>();
+        final List<PointValue> heightvalues = new ArrayList<PointValue>();
+        logArrayList = new ArrayList<Logs>();
+
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("boxes").child("plant001").child("logs");
+
+        ChildEventListener childEventListener = new ChildEventListener() {
+            int index = 0;
+            int number = 0;
+
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d("FIREBASE", "onChildAdded:" + dataSnapshot.getKey());
+                Log.d("FIREBASE", "" + dataSnapshot.getValue());
+
+                Logs log = dataSnapshot.getValue(Logs.class);
+                Log.d("FIREBASE", "moisture" + Integer.parseInt(log.moisture));
+                if (number % 120 == 0) {
+                    moisturevalues.add(new PointValue(index, Integer.parseInt(log.moisture)));
+                    heightvalues.add(new PointValue(index, Integer.parseInt(log.wHeight)));
+                    logArrayList.add(log);
+                    index++;
+                }
+                number++;
+                Line moistureLine = new Line(moisturevalues);
+                moistureLine.setColor(ChartUtils.COLOR_BLUE);
+
+                Line heightLine = new Line(heightvalues);
+                heightLine.setColor(ChartUtils.COLOR_VIOLET);
+
+                List<Line> lines = new ArrayList<Line>();
+                lines.add(moistureLine);
+                lines.add(heightLine);
+
+                data = new LineChartData(lines);
+                previewData = new LineChartData(data);
+
+                data.setAxisYLeft(new Axis().setHasLines(true).setTypeface(Typeface.DEFAULT_BOLD).setTextColor(Color.rgb(120, 120, 120)));
+
+                previewData.getLines().get(0).setColor(ChartUtils.DEFAULT_COLOR);
+                previewData.getLines().get(1).setColor(ChartUtils.DEFAULT_COLOR);
+                previewData.getLines().get(0).setHasPoints(false);
+                previewData.getLines().get(1).setHasPoints(false);
+
+                chart.setLineChartData(data);
+                previewChart.setLineChartData(previewData);
+
+                chart.setZoomEnabled(false);
+                chart.setScrollEnabled(false);
+                chart.setOnValueTouchListener(new ValueTouchListener());
+
+                previewChart.setViewportChangeListener(new ViewportListener());
+                previewX(true);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        myRef.addChildEventListener(childEventListener);
+
         setContentView(R.layout.activity_details);
-        chart = (LineChartView)findViewById(R.id.chart);
+        chart = (LineChartView) findViewById(R.id.chart);
         previewChart = (PreviewLineChartView) findViewById(R.id.preview_chart);
-
-        generateDefaultData();
-
-        chart.setLineChartData(data);
-        chart.setZoomEnabled(false);
-        chart.setScrollEnabled(false);
-        chart.setOnValueTouchListener(new ValueTouchListener());
-
-        previewChart.setLineChartData(previewData);
-        previewChart.setViewportChangeListener(new ViewportListener());
-
-        previewX(true);
     }
+
 
     private void generateDefaultData() {
         int numValues = 50;
